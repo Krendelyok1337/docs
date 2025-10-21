@@ -1,7 +1,7 @@
 ---
 title: 'Complex Onchain NFTs'
 slug: /complex-onchain-nfts
-description: A tutorial that teaches how to make complex nfts that are procedurally generated and have onchain metadata and images.
+description: A tutorial that teaches how to make complex NFTs that are procedurally generated and have onchain metadata and images.
 author: briandoyle81
 
 ---
@@ -10,17 +10,17 @@ author: briandoyle81
 
 Many NFTs are dependent on offchain metadata and images. Some use immutable storage locations, such as [IPFS]. Others use traditional web locations, and many of these allow the owner of the contract to modify the URL returned by a contract when a site or user attempts to retrieve the location of the token art and metadata. This power isn't inherently bad, because we probably want someone to be able to fix the contract if the storage location goes down. However, it does introduce a requirement to trust the contract owner.
 
-Although challenging, it is possible to write a smart contract that contains all the necessary logic and data to generate json metadata and SVG images, entirely onchain. It **will** be expensive to deploy, but will be as cheap as simpler contracts to mint!
+Although challenging, it is possible to write a smart contract that contains all the necessary logic and data to generate JSON metadata and SVG images, entirely onchain. It **will** be expensive to deploy, but will be as cheap as simpler contracts to mint!
 
 In this tutorial, we'll show you how to do this to create your own fully-onchain art project, similar to our [sample project].
 
 ## Objectives
 
-By the end of this tutorial you should be able to:
+By the end of this tutorial, you should be able to:
 
-- Programmatically generate and return json metadata for ERC-721 tokens
-- Deterministically construct unique SVG art in a smart contract
-- Generate deterministic, pseudorandom numbers
+- Programmatically generate and return  metadata for ERC-721 tokens;
+- Deterministically construct unique SVG art in a smart contract;
+- Generate deterministic, pseudorandom numbers.
 
 ## Prerequisites
 
@@ -105,7 +105,7 @@ contract LandSeaSkyNFT is ERC721 {
 
 Normally, you'd override `_baseURI()` with the base URL for the location you select to keep your NFT metadata. This could be a website, IPFS folder, or many other possible locations.
 
-Since this contract will be generating the .json file directly, instead set it to indicate this to the browser:
+Since this contract will be generating the .JSON file directly, instead set it to indicate this to the browser:
 
 ```solidity
 function _baseURI() internal pure override returns (string memory) {
@@ -115,7 +115,7 @@ function _baseURI() internal pure override returns (string memory) {
 
 ### Importing the Base64 Library
 
-As indicated above, you'll be returning the json metadata in [Base64] format. OpenZeppelin has a utility contract to do this. You'll also need the `Strings` library. Go ahead and import them:
+As indicated above, you'll be returning the JSON metadata in [Base64] format. OpenZeppelin has a utility contract to do this. You'll also need the `Strings` library. Go ahead and import them:
 
 ```solidity
 import "@openzeppelin/contracts/utils/Base64.sol";
@@ -131,7 +131,7 @@ Base64 allows the transport of binary data over the web in a reliable way. It is
 Next, set up your `tokenURI` function override. You'll need to write some other contracts to make this work, but you can write most of the code and stub out a plan for the rest to:
 
 - Check and ensure the token ID exists
-- Compile the json metadata for the token, including:
+- Compile the JSON metadata for the token, including:
   - The `"name"` of the NFT
   - A `"description"`
   - The `"image"`
@@ -143,7 +143,7 @@ function tokenURI(uint _tokenId) public view override returns (string memory) {
     revert InvalidTokenId(_tokenId); // Don't forget to add the error above!
   }
 
-  string memory json = Base64.encode(
+  string memory JSON = Base64.encode(
     bytes(
       string(
         abi.encodePacked(
@@ -162,7 +162,7 @@ function tokenURI(uint _tokenId) public view override returns (string memory) {
 ```
 
 <Caution>
-Getting the quotes and commas correct when the json is broken apart like this is challenging. When debugging, look here first!
+Getting the quotes and commas correct when the JSON is broken apart like this is challenging. When debugging, look here first!
 </Caution>
 
 ### Test Your Progress
@@ -349,7 +349,7 @@ For testing purposes, it may be easier if you add functions to allow you to chan
 Finally, swap your `TODO` with a line to `Base64.encode` a call to the renderer:
 
 ```solidity
-string memory json = Base64.encode(
+string memory JSON = Base64.encode(
   bytes(
     string(
       abi.encodePacked(
@@ -404,7 +404,7 @@ Deploy the contracts to Base Sepolia and verify them, or at least verify `LandSe
 
 Open the contract in [Basescan], connect with your wallet, and mint some NFTs.
 
-**Wait a few minutes**, then open the [testnet version of Opensea] and look up your contract. It may take several minutes to show up, but when it does, if everything is working you'll see NFTs with the ocean part of the art! Neat!
+**Wait a few minutes**, then open the [testnet version of OpenSea] and look up your contract. It may take several minutes to show up, but when it does, if everything is working you'll see NFTs with the ocean part of the art! Neat!
 
 ![First pass NFT](/images/onchain-generative-nfts/first_pass.png)
 
@@ -492,7 +492,7 @@ string constant COLOR3 = "#dfd061";
 string constant COLOR4 = "#e3f9f7";
 ```
 
-Now, stub out your return for the `render` function. It will use the built in method of using `abi.encode` and casting to `string` to combine all the parts and return them.
+Now, stub out your return for the `render` function. It will use the built-in method of using `abi.encode` and casting to `string` to combine all the parts and return them.
 
 ```solidity
 function render(uint _tokenId) public pure returns (string memory) {
@@ -852,8 +852,8 @@ In this tutorial, you've learned how to take advantage of the fact that offchain
 [IPFS]: https://ipfs.tech/
 [Base64]: https://en.wikipedia.org/wiki/Base64
 [Hardhat and Hardhat Deploy]: https://docs.base.org/learn/hardhat-deploy/hardhat-deploy-sbs
-[testnet version of Opensea]: https://testnets.opensea.io/
+[testnet version of OpenSea]: https://testnets.opensea.io/
 [sample project]: https://github.com/base-org/land-sea-and-sky
 [Sample Art]: https://github.com/base-org/land-sea-and-sky/tree/master/Final_SVGs
-[Basescan]: https://sepolia.basescan.org/
+[BaseScan]: https://sepolia.basescan.org/
 
